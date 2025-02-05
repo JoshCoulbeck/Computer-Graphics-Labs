@@ -52,6 +52,47 @@ int main( void )
     // End of window creation
     // =========================================================================
     
+    // Define vertices
+    static const float vertices[] = {
+         0.1f,  0.1f, -0.1f,   // triangle 1
+         0.9f,  0.1f, -0.5f,
+         0.5f,  -0.8f, 0.9f,
+        
+    };
+   
+    // Define vertex colours
+    static const float colours[] = {
+        1.0f, 0.0f, 0.0f,    // triangle 1 (red)
+        1.0f, 0.0f, 0.0f,
+        1.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 1.0f,    // triangle 2 (blue)
+        0.0f, 0.0f, 1.0f,
+        0.0f, 0.0f, 1.0f,
+    };
+    
+
+    // Create colour buffer
+    unsigned int colourBuffer;
+    glGenBuffers(1, &colourBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, colourBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(colours), colours, GL_STATIC_DRAW);
+
+    // Create the Vertex Array Object (VAO)
+    unsigned int VAO;
+    glGenVertexArrays(1, &VAO);
+    glBindVertexArray(VAO);
+
+    // Compile shader program
+    unsigned int shaderID = LoadShaders("vertexShader.glsl", "fragmentShader.glsl");
+
+    // Use the shader program
+    glUseProgram(shaderID);
+
+    // Create Vertex Buffer Object (VBO)
+    unsigned int VBO;
+    glGenBuffers(1, &VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 	// Ensure we can capture keyboard inputs
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
     
@@ -64,15 +105,39 @@ int main( void )
         // Clear the window
         glClearColor(0.2f, 0.2f, 0.2f, 0.0f);
         glClear(GL_COLOR_BUFFER_BIT);
+
+        // Send the VBO to the shaders
+        glEnableVertexAttribArray(0);
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glVertexAttribPointer(0,         // attribute
+            3,         // size
+            GL_FLOAT,  // type
+            GL_FALSE,  // normalise?
+            0,         // stride
+            (void*)0); // offset
+
+        // Draw the triangles
+        glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (3 * sizeof(float)));
+
+        // Send the colour buffer to the shaders
+        glEnableVertexAttribArray(1);
+        glBindBuffer(GL_ARRAY_BUFFER, colourBuffer);
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
         
 		// Swap buffers
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
+    // Cleanup
+    glDeleteBuffers(1, &VBO);
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteProgram(shaderID);
     
 	// Close OpenGL window and terminate GLFW
 	glfwTerminate();
 	return 0;
+
+  
 }
 
 void keyboardInput(GLFWwindow *window)
