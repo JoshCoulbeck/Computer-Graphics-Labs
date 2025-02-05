@@ -54,9 +54,9 @@ int main( void )
     
     // Define vertices
     static const float vertices[] = {
-         0.1f,  0.1f, -0.1f,   // triangle 1
-         0.9f,  0.1f, -0.5f,
-         0.5f,  -0.8f, 0.9f,
+         0.1f,  0.1f, 0.0f,   // triangle 1
+         0.9f,  0.1f, 0.0f,
+         0.5f,  -0.8f, 0.0f,
         
     };
    
