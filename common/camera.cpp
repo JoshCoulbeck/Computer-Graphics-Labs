@@ -13,4 +13,6 @@ void Camera::calculateMatrices()
 
     // Calculate the projection matrix
     projection = glm::perspective(fov, aspect, near, far);
+
+
 }

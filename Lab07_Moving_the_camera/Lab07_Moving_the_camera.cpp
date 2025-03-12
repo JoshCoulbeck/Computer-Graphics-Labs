@@ -1,4 +1,4 @@
-#include <iostream>
+ #include <iostream>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -10,6 +10,8 @@
 
 // Function prototypes
 void keyboardInput(GLFWwindow *window);
+
+
 
 // Create camera object
 Camera camera(glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3(0.0f, 0.0f, 0.0f));
@@ -309,4 +311,17 @@ void keyboardInput(GLFWwindow *window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
+
+    // Move the camera using WSAD keys
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        camera.eye += camera.front;
+
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        camera.eye -= camera.front;
+
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        camera.eye -= camera.right;
+
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        camera.eye += camera.right;
 }
