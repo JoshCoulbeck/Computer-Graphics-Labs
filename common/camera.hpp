@@ -21,6 +21,11 @@ public:
     glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
     glm::vec3 front = glm::vec3(0.0f, 0.0f, -1.0f);
 
+    // Camera Euler angles
+    float yaw = Maths::radians(-90.0f);
+    float pitch = 0.0f;
+    float roll = 0.0f;
+
 
     // Transformation matrices
     glm::mat4 view;
@@ -32,5 +37,5 @@ public:
     // Methods
     void calculateMatrices();
 
-
+    void calculateCameraVectors();
 };
